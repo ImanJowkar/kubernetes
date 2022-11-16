@@ -287,7 +287,7 @@ kubectl apply -f calico.yaml
 
 # after one year :))),  all pod are in the running state and you can join the worker node to the cluster
 
-
+```
 kubectl get pod -n kube-system
 
 NAME                                           READY   STATUS    RESTARTS   AGE
@@ -307,11 +307,10 @@ pod/kube-scheduler-master                      1/1     Running   0          19m
 ```
 
 ### Join the worker node to the cluster
+for join any worker node to the cluster run the following command
+
 
 ```
-# for join any worker node to the cluster run the following command
-
-
 kubeadm join 172.16.13.10:6443 --token uq6avr.koz1b4ncdp88j4oh --discovery-token-ca-cert-hash sha256:92e6317bab5f6a5e0ee4b498c8859367d3373eddfa305b3ff26f649b9df99783 
 
 # if you lose the commad, don't worry about it you can create a new token with the following command
