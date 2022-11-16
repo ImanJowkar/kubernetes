@@ -265,7 +265,7 @@ kubeadm join 172.16.13.10:6443 --token uq6avr.koz1b4ncdp88j4oh --discovery-token
 
 
 # after one year :))),  all pod are in the running state and you can join the worker node to the cluster
-
+```
 
 kubectl get pod -n kube-flannel
 
@@ -276,15 +276,16 @@ pod/kube-flannel-ds-d5vnr   1/1     Running   0          7m14s
 
 
 ```
+```
 # if you lose the commad, don't worry about it you can create a new token with the following command
 
 kubeadm token create --print-join-command
 
-```
+
 
 ### Cluster is setup successfully
 
-```
+
 
 kubectl get pod -n kube-system 
 
