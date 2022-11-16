@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-alpha
+  labels:
+    app: nginx-alpha
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-alpha
+  template:
+    metadata:
+      labels:
+        app: nginx-alpha
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: log-data
+            mountPath: /var/log
+
+      - name: log-sidecar
+        image: busybox:1.28.4
+        command: ['sh', '-c']
+        args:
+        - while true; do;
+           echo "$(date) INFO some app data" >> /var/log/myapp.log;
+           sleep 5;
+          done;
+        volumeMounts:
+          - name: log-data
+            mountPath: /var/log
+
+      volumes:
+      - name: log-data
+        emptyDir: {}
