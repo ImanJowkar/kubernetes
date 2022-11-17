@@ -40,3 +40,19 @@ kubectl edit cm/kube-proxy -n kube-system
 kubectl delete pod -l k8s-app=kube-proxy -n kube-system
 
 ```
+
+## for monitor kube-etc and kube-scheduler
+```
+# go to the /etc/kubernetes/manifests  and change 127.0.0.1 to 0.0.0.0
+
+```
+
+
+
+# good grafana dashboard
+
+```
+1860    # Node Exporter Full
+
+
+```

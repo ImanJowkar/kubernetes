@@ -33,3 +33,12 @@ kubectl scale deploy --selector="k8s-app=kube-dns" --replicas=5 -n kube-system
 ```
  
 
+
+
+# show pod and sort by creation
+
+```
+kubectl get po --sort-by=.metadata.creationTimestamp -n <<namespace>> | tac
+
+kubectl get pods --sort-by=.metadata.creationTimestamp
+```
