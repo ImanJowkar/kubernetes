@@ -50,3 +50,22 @@ kubectl get po --sort-by=.metadata.creationTimestamp -n <<namespace>> | tac
 
 kubectl get pods --sort-by=.metadata.creationTimestamp
 ```
+
+
+
+# force to delete all terminating pods
+```
+for p in $(kubectl get pods | grep Terminating | awk '{print $1}'); do kubectl delete pod $p --grace-period=0 --force;done
+
+```
+
+
+## difference between ReplicaSet and deployment
+[refrence](https://stackoverflow.com/questions/69448131/kubernetes-whats-the-difference-between-deployment-and-replica-set)
+Deployment resource makes it easier for updating your pods to a newer version.
+
+Lets say you use ReplicaSet-A for controlling your pods, then You wish to update your pods to a newer version, now you should create Replicaset-B, scale down ReplicaSet-A and scale up ReplicaSet-B by one step repeatedly (This process is known as rolling update). Although this does the job, but it's not a good practice and it's better to let K8S do the job.
+
+A Deployment resource does this automatically without any human interaction and increases the abstraction by one level.
+
+Note: Deployment doesn't interact with pods directly, it just does rolling update using ReplicaSets.
