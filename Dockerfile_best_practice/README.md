@@ -52,7 +52,7 @@ ENTRYPOINT ["/bin/ping"]
 
 # Multi-stage Builds in complier language 
 
-
+ARG TAG=1.2
 FROM golang:$TAG as BUILD
 /app/demo
 
