@@ -5,7 +5,7 @@ metadata:
   labels:
     app: my-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: my-app
@@ -15,6 +15,11 @@ spec:
         app: my-app
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.14.2
-        imagePullPolicy: IfNotPresent
+      - name: my-app
+        image: busybox:1.28.4
+        command: ['sh', '-c', 'printenv db_data db_user db_pass; sleep 200']
+        envFrom:
+        - configMapRef:
+            name: myapp-config
+
+

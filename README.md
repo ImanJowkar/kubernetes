@@ -69,3 +69,125 @@ Lets say you use ReplicaSet-A for controlling your pods, then You wish to update
 A Deployment resource does this automatically without any human interaction and increases the abstraction by one level.
 
 Note: Deployment doesn't interact with pods directly, it just does rolling update using ReplicaSets.
+
+
+## Imperative command
+
+```
+# pod ad svc
+kubectl run nginx-pod --image=nginx:alpine --dry-run=client -o yaml
+kubectl run redis --image=redis:alpine --labels=tier=db --dry-run=client -o yaml
+kubectl expose pod redis --name redis-service --port 6379 --target-port 6379 --dry-run=client -o yaml
+kubectl explain pods --recursive | less
+kubectl explain pods --recursive | grep -A10 envFrom
+
+
+# deployment
+kubectl create deployment webapp --image=nginx
+
+
+
+# configmap 
+kubectl create configmap config_name --from-literal=APP_COLOR=blue
+kubectl create configmap app-config2 --from-literal="APP_COLOR=blue" --from-literal=APP=4
+
+
+kubectl create configmap config_name --from-file=<path-to-file>
+
+# declaritive way
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-config
+data:
+  db_data: mysql-service
+  db_port: 3306
+
+
+
+# secret
+
+kubectl create secret generic secret_name --from-literal=DB_Host=mysql --from-literal=DB_Pass=pass
+
+
+echo username | base64
+echo bXl1c2Vy | base64 -d
+echo -n "bXl1c2Vy" | base64 -d
+
+
+
+
+
+
+
+
+```
+
+# label in nodes 
+```
+kubectl label node node_name type=worker
+
+kubectl get nodes --show-labels
+
+
+```
+
+
+
+# declare env variable which are in a file
+```
+export $(grep -v '^#' .env | xargs)
+
+
+```
+
+
+# securityContext in Pods
+[refrence](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ubuntu
+  name: ubuntu
+spec:
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 3000
+    fsGroup: 2000
+  containers:
+  - image: ubuntu:latest
+    name: ubuntu
+    volumeMounts:
+      - name: sec
+        mountPath: /data/demo
+    securityContext:
+      allowPrivilegeEscalation: false
+  volumes:
+  - name: sec
+    emptyDir: {}
+  restartPolicy: Always
+
+# ---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ubuntu
+  name: ubuntu
+spec:
+  containers:
+  - image: ubuntu:latest
+    name: ubuntu
+    securityContext:
+        runAsUser: 1001
+        capabilities:           # capabilities are only supported at the container level not at the POD level
+          add: ["MAC_ADMIN"]
+  restartPolicy: Always
+
+
+
+```
