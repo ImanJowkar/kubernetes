@@ -266,9 +266,16 @@ change the value of CIDR to CIDR which we setup the cluster
             # The default IPv4 pool to create on startup if none exists. Pod IPs will be
             # chosen from this range. Changing this value after installation will have
             # no effect. This should fall within `--cluster-cidr`.
-            - name: CALICO_IPV4POOL_CIDR  # uncomment This line  
-              value: "10.96.0.0/12"   # uncomment this line
-            # Disable file logging so `kubectl logs` works.
+           
+	   
+	   
+	   
+	   - name: CALICO_IPV4POOL_CIDR  ------------------------------------------> # uncomment This line  
+              value: "10.96.0.0/12"   ----------------------------------------------> # uncomment this line
+           
+	   
+	   
+	   # Disable file logging so `kubectl logs` works.
             - name: CALICO_DISABLE_FILE_LOGGING
               value: "true"
             # Set Felix endpoint to host default action to ACCEPT.
