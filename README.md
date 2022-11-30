@@ -137,7 +137,7 @@ kubectl get nodes --show-labels
 # declare env variable which are in a file
 ```
 export $(grep -v '^#' .env | xargs)
-
+watch kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=node_name
 
 ```
 
@@ -189,5 +189,17 @@ spec:
   restartPolicy: Always
 
 
+```
+
+# drain, cordon, uncordon
+```
+kubectl drain worker-k3s --ignore-daemonsets
+
+kubectl uncordon worker-k3s
+
+
+----
+kubectl cordon worker-k3s
+kubectl uncordon worker-k3s
 
 ```

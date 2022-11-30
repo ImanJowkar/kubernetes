@@ -8,8 +8,10 @@
 ```
 kubectl get resourcequotas
 kubectl describe quota
-
+kubectl top pod
 
 
 
 ```
+
+by default kubernetes assumes that a pod or a container within a pod requires 0.5 cpu and 256Mi memory.

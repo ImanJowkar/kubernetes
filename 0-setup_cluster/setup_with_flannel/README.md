@@ -65,7 +65,7 @@ EOF
 
 ```
 
-### configure some setting to sysctl
+### configure kernel parameter setting to sysctl
 
 ```
 sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
