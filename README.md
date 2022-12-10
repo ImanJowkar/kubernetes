@@ -56,6 +56,7 @@ kubectl get pods --sort-by=.metadata.creationTimestamp
 # force to delete all terminating pods
 ```
 for p in $(kubectl get pods | grep Terminating | awk '{print $1}'); do kubectl delete pod $p --grace-period=0 --force;done
+kubectl patch svc you-svc -p '{"spec": {"type": "NodePort"}}'
 
 ```
 
@@ -201,5 +202,24 @@ kubectl uncordon worker-k3s
 ----
 kubectl cordon worker-k3s
 kubectl uncordon worker-k3s
+
+```
+
+
+
+# tip for working with kubernetes
+```
+alias k="kubectl"
+alias c="clear"
+
+source <(kubectl completion bash | sed 's/kubectl/k/g')
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+
+
+k explain <resource_name>
+
+# switching between multiple cluster
+k config use-context <context_name>
+
 
 ```

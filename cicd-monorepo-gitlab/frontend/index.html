@@ -1,0 +1,140 @@
+<html lang="en">
+<style>
+    .container {
+        margin: 20px auto;
+    }
+    .button {
+        width: 160px;
+        height: 45px;
+        border-radius: 6px;
+        font-size: 15px;
+        margin-top: 20px;
+    }
+    img {
+        width: 310px;
+        height: 187px;
+        display: block;
+        margin-bottom: 20px;
+    }
+    hr {
+        width: 400px;
+        margin-left: 0;
+    }
+    h3 {
+        display: inline-block;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }   
+    ul li {
+        width: 240px;
+        display: flex;
+        justify-content: space-between;
+    }
+    ul li span {
+        padding: 5px;
+        margin-left: 35px;
+    }
+    
+</style>
+<script>
+  async function handleProductsRequest() {
+
+    if (document.getElementsByClassName('product').length != 0) {
+        // products already displayed
+        return
+    }
+
+    // window.location.href will be the IP or DNS name of EC2 instance, K8s worker node or app LoadBalancer
+    const response = await fetch(`${window.location.href}get-products`);
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("stringified data: " + JSON.stringify(jsonData));
+    
+    let productsList = document.getElementById('products');
+
+    jsonData.products.forEach(product => {
+      let li = document.createElement('li');
+      let spanName = document.createElement('span');
+      let spanPrice = document.createElement('span');
+
+      spanName.setAttribute("class", "name");
+      spanPrice.setAttribute("class", "price");
+      li.setAttribute("class", "product");
+
+      spanName.innerText = product.name;
+      spanPrice.innerText = `$${product.price}`;
+
+      li.appendChild(spanName);
+      li.appendChild(spanPrice);
+      productsList.appendChild(li);
+
+    });
+
+    // const cont = document.getElementById('products-container');
+    // cont.style.display = 'block';
+  }
+
+  async function handleShoppingCartRequest() {
+    
+    if (document.getElementsByClassName('shopping-cart-item').length != 0) {
+        // shopping cart already displayed
+        return
+    }
+
+    const response = await fetch(`${window.location.href}get-shopping-cart`);
+    console.log("response", response);
+    const jsonData = await response.json();
+    console.log("stringified data: " + JSON.stringify(jsonData));
+    
+    let productsList = document.getElementById('shopping-cart');
+
+    jsonData.shoppingCart.forEach(item => {
+      let li = document.createElement('li');
+      let spanName = document.createElement('span');
+      let spanNumber = document.createElement('span');
+      let spanPrice = document.createElement('span');
+
+      spanName.setAttribute("class", "name");
+      spanNumber.setAttribute("class", "name");
+      spanPrice.setAttribute("class", "price");
+      li.setAttribute("class", "shopping-cart-item");
+
+      spanName.innerText = item.product;
+      spanNumber.innerText = item.number;
+      spanPrice.innerText = `$${item.price}`;
+
+      li.appendChild(spanName);
+      li.appendChild(spanNumber);
+      li.appendChild(spanPrice);
+      productsList.appendChild(li);
+
+    });
+  }
+</script>
+<body>
+<div>
+    <h1>Products</h1>
+    <img src='https://images.prismic.io/frameworkmarketplace/5dc5fc06-aec5-4f28-a924-0230aa91a360_Pre-Marketplace+-+image_02.jpg?auto=compress,format' alt="user-profile">
+</div>
+
+<div class='container' id='products-container'>
+    <ul id="products"></ul>
+    <button class='button' onclick="handleProductsRequest()">View</button>
+</div>
+
+<div>
+    <h1>Shopping Cart</h1>
+    <img src='https://www.statcan.gc.ca/o1/sites/default/files/2021-11/shopping_2.jpg' alt="user-profile">
+</div>
+
+<div class='container' id='shopping-cart-container'>
+    <ul id="shopping-cart"></ul>
+    <button class='button' onclick="handleShoppingCartRequest()">View</button>
+</div>
+</body>
+</html>

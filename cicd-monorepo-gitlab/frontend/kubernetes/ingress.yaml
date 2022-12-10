@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: $MICRO_SERVICE
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: $ENDPOINT
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: $MICRO_SERVICE
+            port:
+              number: $SERVICE_PORT

@@ -1,0 +1,15 @@
+bases:
+  - ../../base
+  # - service.yaml
+  # - build/src/nginx.yaml
+
+namePrefix: prod-
+
+commonLabels:
+  evn: prod
+
+commonAnnotations:
+  machine-class: super-low
+
+patches:
+  - replica-counts.yaml

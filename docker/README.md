@@ -55,7 +55,7 @@ docker image inspect image_name
 docker login https://hub.docker.com
 
 usermod -aG docker <USER>
-
+newgrp docker
 
 docker cp <host_address> container_name:/tmp  #copy a file from host to a container
 docker cp container_name:/tmp/web.conf .      # copy a file from container to host
@@ -139,6 +139,28 @@ yes, but last one will run when we start a container.
 
 ## what is docker network
 it will enable networking between your containers. whenever you install docker, docker0(bridge) will create.
+```
+docker network create net1
+docker network create net2
+
+docker network connect net1 container_name
+```
+
+
+
+## what is the use of --net-alias or --network-alias ?
+```
+# This is a kind of load balancing.
+docker run --name c1 --net-alias c
+docker run --name c2 --net-alias c
+docker run --name c3 --net-alias c
+
+```
+
+## what is the use of --links?
+links two different containers
+
+
 
 
 ## is docker compose is a production tools?
@@ -148,4 +170,13 @@ no, the production tools is docker swarm or kubernetes.
 yes, we can use it. but we have to specify the filename with the following command: 
 ```
 docker-compose -f docker-compoes.jso up -d
+```
+
+
+## what is ONBUILD instructions in Dockerfile
+```
+
+
+
+
 ```

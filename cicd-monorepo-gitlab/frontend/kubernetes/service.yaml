@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: $MICRO_SERVICE
+spec:
+  type: ClusterIP
+  selector:
+    app: $MICRO_SERVICE
+  ports:
+    - protocol: TCP
+      port: $SERVICE_PORT
+      targetPort: $CONTAINER_PORT
