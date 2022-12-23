@@ -38,14 +38,14 @@ always config containerd with insecure registry
 
       [plugins."io.containerd.grpc.v1.cri".registry.auths]
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
-        [plugins."io.containerd.grpc.v1.cri".registry.configs."gitlab.example.com:5005".tls]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."gitlab.example.com:443".tls]
           insecure_skip_verify = true
-        [plugins."io.containerd.grpc.v1.cri".registry.configs."gitlab.local:5005".auth]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."gitlab.example.com:443".auth]
 
       [plugins."io.containerd.grpc.v1.cri".registry.headers]
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
-        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gitlab.example.com:5005"]
-        endpoint = ["https://gitlab.example.com:5005"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gitlab.example.com:443"]
+        endpoint = ["https://gitlab.example.com:443"]
 
 ```
 
