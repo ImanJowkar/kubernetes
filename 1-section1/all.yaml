@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: web-nginx-pvc
+  namespace: web-nginx
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-nginx-conf
+  namespace: web-nginx
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    # configMap altered and again altered
+    http {
+      server {
+          listen       80;
+          server_name  localhost;
+          location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+      }
+    }
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-nginx-secret-tls
+  namespace: web-nginx
+type: kubernetes.io/tls
+data:
+  # the data is abbreviated in this example
+  tls.crt: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZGVENDQXYyZ0F3SUJBZ0lVRmoxSlpmVUcxOFFseWlwK1cwbXhNRHI4Szlvd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0dqRVlNQllHQTFVRUF3d1BkMlZpTG10MVltVnlMbXh2WTJGc01CNFhEVEl5TVRFd09URXpNRFF6TlZvWApEVEl6TVRFd09URXpNRFF6TlZvd0dqRVlNQllHQTFVRUF3d1BkMlZpTG10MVltVnlMbXh2WTJGc01JSUNJakFOCkJna3Foa2lHOXcwQkFRRUZBQU9DQWc4QU1JSUNDZ0tDQWdFQXJDUzlWUjZLRkdRVzNkNkNQSDAzN2pGdGhsemkKdnFaandNUUMyZ1pxb1VCRmh0emNxUHYzWnJQbjZ1cGxLQnlBVm45dDBBbm0wYnR0SDNVaGZ3TmJvTmdBd1o4SwpGS2pvT2FZOVF0QnVoOGZjVFZ1K0p6S1JIWEM0V2RCNGlTMnlEUUdxV3RnKzBEaWN5Y3kyYmdOaUg0ZnJFTHlmClJSbTNnSDM5dzRRUDJBS0F2Y3hobFZGQk5NMDFDMCtkYWZ3Tm8yWXlLZTVKYkVBMjRLanhxK21PWkFjN214YXQKenIxbVh3VlpML2gxYVovNVVRVlJKZGZGWHc0cnNYbjJEeTB0a2NJaWxYU1Y2Qk9HekFHNE5Bb2Mrd2Q2Mi93RAp6SkxEdVZ5VVBWNVo4ZmRkeXdjTnBadllCVGMxL0JzSTVMZUdpYmtYaUVFRUVFZFgzNXpZUlFVSk9IZlpsVHZ4Ckhnek93N3hHWXdEd1EzbkY0QjVQSG9SZ054MmJ4bXFhWE5EWnFoa0VwWFRMR0FIMkZDQjEwRlUzTEJvaUQ3T3AKSWFsSURQQm5aYWRTblE2ZzR6dzdHdzZmWDhoT0s1Y1ZlQ3Q5d0hJbW1RWW1vTXBLa2drMjlNYVhaSldwYWx5MwpmZytXaWR2WEdPc1F1UmsyK1BLcDgvVUJMdyt4SVFRODN4TmdqbHlvTW9qZ0tpdWx2eU9RcFRJWXFweHo2NUdPCnZKdW5iZXRiMDUyRXFwb1VXSzUxZ2t0WFlKZmRMN0V4SnN6ck9KYWZkdXUvam5KeXozcTdZTmw0SmxSZi9veUQKNXhWbzVpTnNZNVJmWjMxNkF5YUsycUJaTE9JOXdGbDhCSFA3My9sT1hvcXc1b1J0cGl3YlBZZDVlZ3RMVUJRQQpXNWorWk8yYkRzcUhwOThDQXdFQUFhTlRNRkV3SFFZRFZSME9CQllFRk1hUzNncHZjcS9DN2lJaTc0UXBEQjEzCjhDcW5NQjhHQTFVZEl3UVlNQmFBRk1hUzNncHZjcS9DN2lJaTc0UXBEQjEzOENxbk1BOEdBMVVkRXdFQi93UUYKTUFNQkFmOHdEUVlKS29aSWh2Y05BUUVMQlFBRGdnSUJBSkZUSitxb0hRYloxYkhBbmd3SVBXZmxaaWU3ZEMrVQpUYnpPUEY4ampNRG0waXlqb0ZlRW40ZW1sTGlEN0g2YWFYMzk2djJKdEprdzJmdk5ncDdDdTNXeEZUWFdPdVNhCk85MFJIWGhZbTNxUFZoR0NRSUlRSElFL21oRXdlZW5KODFDZWs2VGJYNUY0Sm1aRW9jWWQ3SmFRNk5LNXFOd2kKSEpIaHBYN3pOSTJSUStDSmtrd1JsRC8yRWNWajZKYVc1Zjd5T2RYZWExdlJWZDFkWW5pV1Y3QjV0VDVXa2NQNApEMkkxRjJGYnhIdlJmRzB0b09HWXNZZ3lyKzRGelQ2TG85SVg2NndhcHdralhDSW5WOG0ybWsxUWk1cHhTY00yClpCVHJNMjZGSmZ5aWdTendDTmhpYVpOR2xjZUxHR2VlejFXak1RQUtTNWpISTVpbmJnVkRUWGErS0FoWlorbHAKUFZ6WTBDcGFlOHVXbjU0bGxVNmFFLzlPNy8ralRmV2s0SXRTZGVWanhNOTU5bnJZc0ZlbjhuSjc4SHZZUHR0bgpKamp5VnJTKzJDU0lkRnRmVmRUYlIyYk9TOExsRXRwYU1Dam40VHNtWmM4RmIrcUR1eVhrYlF6UG1mV2RVdE1nClBrMSsyQ05NTzJwSU1zTzlqUS93WkREMU02b0xJRDI0YUI3MGVtcUtiR2tlWXlpaE8xanNrZkdrRzYvOFd3alkKb3NMU1lsYUd2NVdCWHI3a2RKVW1IZ1hBOCtEc3cxZmJwUXNERE8rOXhwMkpXV1FPa0hXaXJhUnhMQitBb3A3MgpsNnd3MUxUbzlzL1FNcnhMeFFQeEpqVlhTKzBSZy9CZ3NnUFVRNWV5dXg3RGsvRjF4QTlwRTB3bnN3cWJBTDdBClU5REZMS3RBTytKMAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  tls.key: |
+    LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUpRZ0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQ1N3d2dna29BZ0VBQW9JQ0FRQ3NKTDFWSG9vVVpCYmQKM29JOGZUZnVNVzJHWE9LK3BtUEF4QUxhQm1xaFFFV0czTnlvKy9kbXMrZnE2bVVvSElCV2YyM1FDZWJSdTIwZgpkU0YvQTF1ZzJBREJud29VcU9nNXBqMUMwRzZIeDl4Tlc3NG5NcEVkY0xoWjBIaUpMYklOQWFwYTJEN1FPSnpKCnpMWnVBMklmaCtzUXZKOUZHYmVBZmYzRGhBL1lBb0M5ekdHVlVVRTB6VFVMVDUxcC9BMmpaaklwN2tsc1FEYmcKcVBHcjZZNWtCenViRnEzT3ZXWmZCVmt2K0hWcG4vbFJCVkVsMThWZkRpdXhlZllQTFMyUndpS1ZkSlhvRTRiTQpBYmcwQ2h6N0IzcmIvQVBNa3NPNVhKUTlYbG54OTEzTEJ3MmxtOWdGTnpYOEd3amt0NGFKdVJlSVFRUVFSMWZmCm5OaEZCUWs0ZDltVk8vRWVETTdEdkVaakFQQkRlY1hnSGs4ZWhHQTNIWnZHYXBwYzBObXFHUVNsZE1zWUFmWVUKSUhYUVZUY3NHaUlQczZraHFVZ004R2RscDFLZERxRGpQRHNiRHA5ZnlFNHJseFY0SzMzQWNpYVpCaWFneWtxUwpDVGIweHBka2xhbHFYTGQrRDVhSjI5Y1k2eEM1R1RiNDhxbno5UUV2RDdFaEJEemZFMkNPWEtneWlPQXFLNlcvCkk1Q2xNaGlxbkhQcmtZNjhtNmR0NjF2VG5ZU3FtaFJZcm5XQ1MxZGdsOTB2c1RFbXpPczRscDkyNjcrT2NuTFAKZXJ0ZzJYZ21WRi8raklQbkZXam1JMnhqbEY5bmZYb0RKb3Jhb0ZrczRqM0FXWHdFYy92ZitVNWVpckRtaEcybQpMQnM5aDNsNkMwdFFGQUJibVA1azdac095b2VuM3dJREFRQUJBb0lDQUVFdWtqQjZaVjl1UE1oYk9pWk1aZExBCkRaQk1lS0VuSU90N2JQY0FhZnpQK09PbG1yb3oya3lkdjZuUWdtZ3JUcDh5RmpNcHBLaHkxMUdMaVJqdWZSSU0KNkZCb2Q2azJBZVRlWVNEOUNuVkloTThYOTRzaEZ4aTJOMS91MDgxaHE2TklKNmpKYkJOczlGVm5PZ2F6S2tMMQpOTmw4Q3JUZ0ZYOUdkY0hFTGptbFRQbFJPL3dOcmVxZjd6OXVzSlRTbDVseEYzcVFHMll0ZEhvaURveUJYZVRiClprTUYxZDlNRVVqV25oeFBjS29EcEtSOHBtcjFabXRsVXI4YmhzUGRYLzFxckt5NTNnOW40V2s3RjNSQkJoTTUKbEZoYTkxZE5sV1lKTzZwM0lRakJtVmJJdjI2ZmNhOGI1a21sTlB0aDBNUXlmVW9mRURwWHdWclBLWWNNN3AyLwppeVJGbUZiNFlyVUJyNGVZSHQ4TyszcEYyRUFqeEE1RmhveUZhc1lGQUFrT0dVY3ovSjdEQTJDa2NjQXRzM2c1ClE2VXN5WUYzVXBpSmtha2RkWCs4Uk5kWXovNWNocUFJUlhQUjMvMTI4ZXRLWFVZbmdsVHUvVEpTeGZiZjJYNkoKcjJQYmp6UWh4RTloRnlqN1ExblR4aGlPNjF1UUt1bWU0Z3J1SWlzdiszcjlHV2RyUnk0ZGFwY2l0QWRqQVUyMQpjbkNPOXUwcS85d0tzNE5tcjdncFFrY0dYcW8rYldKR0dYaHo0Uy9JenJmZTRyLzJuUXQ4L1YrcFVyVG9ockk1Cm1xeDF1TUcyWmJhNVo0RWk3Nm5Vb201NlVLSktvK3l4K29KbWJwUGdiZWZtNDRPQU4wa3ZVWUs3akNVWDlFTlMKSVdxN2lHOUE0SWltbXFzVFJJRFpBb0lCQVFEYXVpQUVLdEptWU9ySW8wWUJVRjA3YVpaWW5INmg1RDlyQXFnUQpGamdQSEJYNUVVNzNSWFozNmZoUFBwNjR3dUdNOXZUZExBNnVQOVovWlJYMGgwYUlMT1Z3TDNQUzB5UEJYMFFYCldyVDRQYlF2UU4rOGxyYWlVaHEzTVJIYk16SDFUQi9PL2dSQWVORHFyZ203dER3YWJyQlBVRitBK2xndnMvc3IKb0tCSXExS3NEZlhHQXdlTVBEOWpNbEJzczd6V2hFblhQUkM3aDBQYWpISTFickpOa0grMDFXQnpyL20xVGJGZApEVFlHbVhzdFIvcFJZRE5DOTkrZHJCSlFNUjFMZ01QbFFQYm1WMVM2TlJ2MGF0SjNDenFpa05hMm1zcFdwbUFuCkU4bHJLeVdjMHp5YTd1OElpdTg2aXNHdlY5Q1VHREdhQng1aXMzRW5TaW1Ka1hRWEFvSUJBUURKZW0xdFAwTUcKQkR5M0NOKzJ5R0lad05vMGdoenp3YkJURzlMUVpVWHc0ODN5QW1WemZjc1lybzl6M3dWQjV5TG5kTjc0QjVUQwpZck82cTFsK0NxUVVRZ09CWlB2b2dCU0hGZVg1VStnN0NrSFVmNlBxSUxVVTI4eXIxbUpkN3NwL3FidTdnSERzCkNHY1RBSWJIM2N6UXBqOVZNTXVWRnhXVUdnanhsRnIwREZFdGN3NTE0NUxZZzlORWtCaGhUTTFrdHgxZ3dub1kKZzJwWVNPdEEvSWJZOGF1Ukx0clBTVVV3QWFGdzhReWlLcGZ1a1hXMVJZOUZjZGQ4QmI4YWZjKzF3RFBqRm5DMApzR2pQaGhtTEU5NUM3ZE5GME12THJpVFZ6YSt4a2JhNE9sdEtOa1N6RmVaYVdJamZCR28rY1hiNWN0L0pMSW5OCkRoRHVpbHdVcng5NUFvSUJBUUNsakVoZFB4ZitXdzU1QzNNWjNYeWpVamgwR3dhUmU5TXdLRk9SMFc5ZXFGQk4KTW5lRkdqTWZjWnY2UnBnVm1aTGpnYXMxbDNvSkV0SkRtL3Z4RjA0Z0ZYTVc1U09TQnpMQjBsd1VIUmhwNXpIdwpyZlpwbzl6Wm9MRU54SHNTWUg1SWZmUjVVN05lSk5OalBKU3JXREJCaFZPMnhFdDBzSVo4bkluWHJIeUVZLzl2CnNDVThXT0NtbUpjVmVtaDZ6ZE40dmFteDJrdEcxSXRiNS84dFIvcDJVSThJREpRekc1Y3hUWHVYeFQ4RjRiYmsKUDkxTEtEZkVVUjRVRmIvS3FGSFc2ci9hVGNCUitQbHM4bk9WSENEdDd6YlRBak14QkpsdTJnQmVzMUE0NS9CUQo4V1NtazMraUJKNHF2Z2o0c010eXU1a1hUcG9GOUhFSlhzMXZqUUxEQW9JQkFCTm9hS3dTWVBsdVpRN1ltdnczCmQwTzEwUThuelhRcG56dVNQWTkzZ2ZJL2IzSTFpdUpDSnRNODFYSzY4LzJ5THltT2wzL2E4eGg2ZTRlcXc5Y2gKWFViYVNRNG8xUjlEWHpiWUJDd3RTZnlOODJOdDNETk1iVVVTR3pnZVVhRnN4RExoL2NTRkRkdWV2NWNVQU9lMQoxT253YWI5aUVPcE9xL1IxUVpGTDBpc2FHS1BCSm81eW1vMml2VElvazBDa0xsRGFWc2tnVXJTVHpDV3UrSUp0CkVPeEs4MVRyNTRYNkwrRDg5emt5N3gyYjdzQzdZRlJTM0FjN2ZSOWtTbEZaOXkweDA0MjNkcW5oS0dkOUttNjgKUGpmQ1F3ekJuVEFFbVdYREIzNmFZN2lCWHBQYWdHbWozV21zaDVxOENTUDB1Qm8xVjV0QVlCSFJuZzNzWkF4VwpCamtDZ2dFQUFjUVlCUEN5eWQyYm9nczhTNGp1SkNWYU1KUnMwMVN1cncyQlRsQ1VxbG4wU1ZYd2QwL25UODRkCmdmWGZGY0FnT2NaTG02MDFGM09WRG5hZXpCUlZQQllwVlZ0dUZGM2lqTVUwUzZVeVZmbXpkTEIxN0dDVzVvQ1EKeWRqanFkR1haYTZxOWpwanE5a3pDNVZEUmU3RGppZTF1L1dxRk1wNGRBOEpJMkNrRUNSS3d3ZExiSFFTUDR4MwpoYXRPMjNYcnJxV1FxeGlFRTVMTGxUL1NlWm5JZ0tKSnZIVmhCZGFQdFZjTWlqd3c0QXVEL3FuRmlHK0o0eTlsCisrSUpYSjF2U3UyQmtqNGFVdXlGSGlWN09rcXN4TjZ1bWw2SXVScFhuc1lLaTBPdzZBMkZkenRDaVp4bGI1cmoKV3RJZW1sZVNuZHJKV3JJTTJlb2NVT2llWUdrMkVRPT0KLS0tLS1FTkQgUFJJVkFURSBLRVktLS0tLQo=
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: web-nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # how many pod we can add at a time 
+      maxUnavailable: 0 # how many pods can be unavailable during the rolling update
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 5
+          periodSeconds: 10
+
+        resources:
+          requests:
+            memory: "256Mi"
+          limits:
+            memory: "512Mi"
+          
+        volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: web-nginx-storage
+
+          - name: web-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+
+
+      volumes:
+        - name: web-nginx-storage
+          persistentVolumeClaim:
+            claimName: web-nginx-pvc
+        
+        - name: web-nginx-conf
+          configMap:
+            name: web-nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-nginx
+  namespace: web-nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: web-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.org/lb-method: "ip_hash"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/preserve-trailing-slash: "true"
+    #nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    #nginx.org/proxy-connect-timeout: "30s"
+    #nginx.org/proxy-read-timeout: "20s"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For, X-app123-XPTO"
+    nginx.ingress.kubernetes.io/cors-expose-headers: "*, X-CustomResponseHeader"
+    nginx.ingress.kubernetes.io/cors-max-age: "600"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
+    nginx.ingress.kubernetes.io/limit-rps: "5"
+    nginx.ingress.kubernetes.io/limit-rpm: "300"
+    nginx.ingress.kubernetes.io/limit-connections: "10"
+      #nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.93.20/32"
+
+      
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - web.example.local
+      secretName: web-nginx-secret-tls
+  rules:
+  - host: "web.example.local"
+    http:
+      paths:
+      - pathType: Exact
+        path: "/"
+        backend:
+          service:
+            name: web-nginx
+            port:
+              number: 80
+---

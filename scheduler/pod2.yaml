@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: my-pod1
+  name: my-pod1
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker2    # This is a label
+  containers:
+  - image: nginx
+    name: my-pod1
+  restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: my-pod2
+  name: my-pod2
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker2   # This is a label
+  containers:
+  - image: nginx
+    name: my-pod2
+  restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: my-pod3
+  name: my-pod3
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker6   # This is a label
+    kubernetes.io/arch: amd64   # This is a label
+  containers:
+  - image: nginx
+    name: my-pod3
+  restartPolicy: Always

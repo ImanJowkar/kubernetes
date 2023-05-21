@@ -1,0 +1,7 @@
+resources:
+  - deployment.yaml
+  # - service.yaml
+  # - build/src/nginx.yaml
+
+commonLabels:
+  kustomize-labels: labels-from-kustomize

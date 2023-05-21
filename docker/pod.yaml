@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ubuntu
+  name: ubuntu
+spec:
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 3000
+    fsGroup: 2000
+  containers:
+  - image: ubuntu:latest
+    name: ubuntu
+    command: ["sh"]
+    args: ["-c", "while true; do echo hi; sleep2; done"]
+    volumeMounts:
+      - name: sec
+        mountPath: /data/demo
+    securityContext:
+      allowPrivilegeEscalation: false
+  volumes:
+  - name: sec
+    emptyDir: {}
+  restartPolicy: Always

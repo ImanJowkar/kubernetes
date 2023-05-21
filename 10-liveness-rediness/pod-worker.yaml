@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-health-probes
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 80
+      readinessProbe:
+        tcpSocket:
+          port: 80
+        initialDelaySeconds: 10
+        periodSeconds: 5
+
+      livenessProbe:
+        tcpSocket:
+          port: 80
+        initialDelaySeconds: 5
+        periodSeconds: 15
+

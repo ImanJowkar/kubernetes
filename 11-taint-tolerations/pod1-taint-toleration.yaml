@@ -1,0 +1,18 @@
+# kubectl taint node worker1 spray=mortein:NoSchedule
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+  - key: "spray"
+    operator: "Equal"
+    value: "mortein"
+    effect: "NoSchedule"

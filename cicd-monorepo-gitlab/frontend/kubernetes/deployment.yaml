@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $MICRO_SERVICE
+  labels:
+    app: $MICRO_SERVICE
+spec:
+  replicas: $REPLICAS
+  selector:
+    matchLabels:
+      app: $MICRO_SERVICE
+  template:
+    metadata:
+      labels:
+        app: $MICRO_SERVICE
+    spec:
+      imagePullSecrets:
+      - name: $SECRET_NAME
+      containers:
+      - name: $MICRO_SERVICE
+        image: $IMAGE_NAME:$IMAGE_TAG
+        ports:
+        - containerPort: $CONTAINER_PORT
+        # env:
+        #   - name: PRODUCTS_SERVICE
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: frontend-cm
+        #         key: PRODUCTS_SERVICE
+                
+        #   - name: SHOPPING_CART_SERVICE
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: frontend-cm
+        #         key: SHOPPING_CART_SERVICE

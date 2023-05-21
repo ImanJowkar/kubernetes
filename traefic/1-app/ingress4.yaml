@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`nginx.example.com`) && HeadersRegexp(`From`, `.*example.*`)
+      kind: Rule
+      services:
+        - name: nginx-deploy-main
+          port: 80

@@ -1,0 +1,15 @@
+bases:
+  - ../../base
+  # - service.yaml
+  # - build/src/nginx.yaml
+
+namePrefix: dev-
+ 
+commonLabels:
+  evn: dev
+
+commonAnnotations:
+  machine-class: super-fast
+
+patches:
+  - replica-counts.yaml

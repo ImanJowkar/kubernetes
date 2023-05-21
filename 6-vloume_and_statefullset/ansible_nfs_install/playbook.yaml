@@ -1,0 +1,56 @@
+- name: Install and configure nfs-client
+  hosts: k8s_nodes
+  become: true
+  tasks:
+   - name: update the repo list
+     apt:
+       name: "*"
+       state: latest
+   - name: Install nfs-client
+     apt:
+      name: nfs-common
+      state: present
+
+
+
+
+- name: Install and configure nfs-server
+  hosts: nfs_node
+  become: true
+  tasks:
+    - name: update the repo list
+      apt:
+        name: "*"
+        state: latest
+    - name: Install nfs-server
+      apt:
+        name: nfs-kernel-server
+        state: present
+    - name: Create Directory in nfs-server
+      file:
+        path: /export/cluster-flannel/
+        state: directory
+
+    - name: Configure nfs server to access nfs-client
+      shell:
+        cmd: |
+          bash -c 'echo "/export/cluster-flannel/  *(rw,no_root_squash,no_subtree_check)" >> /etc/exports'
+          cat /etc/exports
+          sudo systemctl restart nfs-kernel-server.service
+
+- name: Install nfs provisioner with helm
+  hosts: k8s_master
+  become: true
+  tasks:
+    - name: Setup nfs-provisioner with helm
+      shell:
+        cmd: |
+          curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+          sudo apt-get install apt-transport-https --yes
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+          sudo apt-get update
+          sudo apt-get install helm
+          helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+          helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.93.180 --set nfs.path=/export/cluster-flannel/
+          sleep 2
+          kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
