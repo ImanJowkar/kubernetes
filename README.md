@@ -207,7 +207,7 @@ kubectl uncordon worker-k3s
 
 
 
-# tip for working with kubernetes
+# recommended tip for working with kubectl 
 ```
 alias k="kubectl"
 alias c="clear"
