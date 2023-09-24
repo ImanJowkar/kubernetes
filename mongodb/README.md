@@ -1,9 +1,33 @@
 # MongoDB
+MongoDB is a popular open-source NoSQL database management system that is designed to store, retrieve, and manage large volumes of data in a flexible and scalable manner. MongoDB is classified as a NoSQL (Not Only SQL) database because it doesn't rely on the traditional relational database tables and SQL (Structured Query Language) for data storage and retrieval. Instead, MongoDB uses a document-oriented data model.
+
+Here are some key characteristics and concepts associated with MongoDB:
+
+1. Document-Oriented: MongoDB stores data in flexible, JSON-like documents called BSON (Binary JSON). These documents can have nested structures, making it suitable for storing complex and hierarchical data.
+
+2. Collections: In MongoDB, documents are organized into collections, which are similar to tables in relational databases. Collections can contain documents with varying structures, unlike traditional databases where all rows in a table must have the same columns.
+
+3. Schemaless: MongoDB is often described as "schemaless" because documents within a collection can have different fields and data types. This flexibility is beneficial for applications where the data structure may evolve over time.
+
+4. Indexing: MongoDB supports various types of indexes to optimize query performance. Indexes can be created on specific fields to speed up data retrieval.
+
+5. Query Language: MongoDB provides a rich query language that allows you to query and manipulate data using commands and operators. The query language is designed to work with the document-oriented data model.
+
+6. Scalability: MongoDB is designed for horizontal scalability, which means you can add more servers to handle increased data loads and traffic. It supports sharding, which allows data to be distributed across multiple servers or clusters.
+
+7. High Availability: MongoDB offers features for high availability, including automatic failover and data replication. This helps ensure that your database remains accessible even in the event of hardware failures.
+
+8. Aggregation Framework: MongoDB includes a powerful aggregation framework that allows you to perform complex data transformations and analysis on your data within the database itself.
+
+MongoDB is commonly used in web applications, mobile apps, and other scenarios where flexible and scalable data storage is required. It has gained popularity for its ease of use and developer-friendly features. MongoDB, Inc., the company behind MongoDB, offers both a free and open-source Community Edition and a commercial Enterprise Edition with additional features and support.
+
+
 
 In our RDBMS you are well known about the table, rows, records, columns and so on, but what is equivalent in mongodb:
-database ---> database
-tables ---> collection
-rows/records ---> document
+
+* database ---> database
+* tables ---> collection
+* rows/records ---> document
 
 # Merits
 
@@ -29,6 +53,17 @@ rows/records ---> document
 * cassandra
 * RavenDB
 
+
+## Mongo config file
+```
+vim /etc/mongod.conf
+
+
+```
+
+
+
+
 # mongo command
 
 ```
@@ -52,6 +87,9 @@ db.movies.insert({"title":"Bohomi2", "release":2018, "language": "INDIA", "actor
 db.movies.find({}, {reviews:1, _id:0})
 db.users.insertMany([{name: "ali", age: 20}, {name: "ali1", age: 21}, {name: "ali2", age: 22}])
 load("/data/mongo.js")
+
+
+
 
 
 
