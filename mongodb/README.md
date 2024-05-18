@@ -56,6 +56,10 @@ In our RDBMS you are well known about the table, rows, records, columns and so o
 
 ## Mongo config file
 ```
+rpm -ql mongodb-org-server
+which mongos
+
+
 vim /etc/mongod.conf
 
 
