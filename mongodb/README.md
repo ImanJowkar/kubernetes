@@ -135,6 +135,15 @@ use admin
 # Configuring authentication, users, and roles in MongoDB
 
 ```
+# edit /etc/mongod.conf
+####
+security:
+   authorization: enabled
+####
+
+
+
+
 use admin
 show collections
 show users
